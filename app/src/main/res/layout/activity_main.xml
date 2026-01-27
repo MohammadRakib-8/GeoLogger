@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="#7F4CAF50"
             android:textColor="@color/black"
             android:layout_marginEnd="8dp"
             android:text="Start Service" />
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="#FF5722"
+            android:backgroundTint="#84FF5722"
             android:textColor="@color/black"
             android:text="Stop Service" />
 
@@ -48,6 +48,7 @@
         android:textSize="18sp"
         android:padding="12dp"
         android:textStyle="bold"
+        android:background="#87FFEB3B"
         app:layout_constraintTop_toBottomOf="@id/button_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

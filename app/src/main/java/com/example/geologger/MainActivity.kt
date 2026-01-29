@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+enableEdgeToEdge()
         checkLocationPermission()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -53,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 2️⃣ Location ON/OFF check
             if (!isLocationEnabled()) {
                 Toast.makeText(this, "Please turn ON location", Toast.LENGTH_SHORT).show()
                 openLocationSettings()

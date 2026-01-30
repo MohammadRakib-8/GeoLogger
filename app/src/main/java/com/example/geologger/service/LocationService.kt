@@ -89,7 +89,7 @@ class LocationService : Service() {
 
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("GeoLogger")
-            .setContentText("Tracking location in background")
+            .setContentText("GeoLogger activated in background")
             .setSmallIcon(R.drawable.ic_location)
             .setOngoing(true)
 //            .setPriority(NotificationCompat.PRIORITY_LOW)

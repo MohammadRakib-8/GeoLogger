@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-enableEdgeToEdge()
+        enableEdgeToEdge()
         checkLocationPermission()
 
         binding = ActivityMainBinding.inflate(layoutInflater)

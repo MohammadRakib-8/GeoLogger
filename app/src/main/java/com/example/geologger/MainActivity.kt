@@ -8,6 +8,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_LOCATION_PERMISSION = 100
     private val REQUEST_NOTIFICATION_PERMISSION = 200
+    private var isServiceRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +50,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.startServiceBtn.setOnClickListener {
+
             if (!isLocationPermissionGranted()) {
                 openAppSettings()
                 Toast.makeText(this, "Please allow location permission", Toast.LENGTH_SHORT).show()
@@ -72,12 +75,16 @@ class MainActivity : AppCompatActivity() {
             }
 
             startLocationService()
-        }
 
+
+        }
+        Handler(mainLooper).postDelayed({
+            askBatteryOptimizationPermission()
+        }, 20_000L)
         binding.stopServiceBtn.setOnClickListener {
             stopService(Intent(this, LocationService::class.java))
             Toast.makeText(this, "Location Service Stopped", Toast.LENGTH_SHORT).show()
-
+isServiceRunning=false
         }
 
         loadLocations()
@@ -105,14 +112,19 @@ class MainActivity : AppCompatActivity() {
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
-
     private fun startLocationService() {
         val intent = Intent(this, LocationService::class.java)
+        if (isServiceRunning) {
+            Toast.makeText(this, "Location Service is already running", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent)
         } else {
             startService(intent)
         }
+        isServiceRunning = true
         Toast.makeText(this, "Location Service Started", Toast.LENGTH_SHORT).show()
     }
 
@@ -168,6 +180,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun askBatteryOptimizationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
+                androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Battery Optimization")
+                    .setMessage("To track your location reliably in the background, please disable battery optimization for this app.")
+                    .setPositiveButton("Go to Settings") { _, _ ->
+                        startActivity(intent)
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+        }
+    }
+
 
     private fun fetchWeather(latitude: Double, longitude: Double) {
         CoroutineScope(Dispatchers.Main).launch {

@@ -32,8 +32,8 @@ class LocationService : Service() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
 
-        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000L).apply {
-            setMinUpdateIntervalMillis(10000L)
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 300_000L).apply {
+            setMinUpdateIntervalMillis(300_000L)
             setMinUpdateDistanceMeters(0f)
         }.build()
 
@@ -89,7 +89,7 @@ class LocationService : Service() {
 
         return NotificationCompat.Builder(this, channelId)
             .setContentTitle("GeoLogger")
-            .setContentText("GeoLogger activated in background")
+            .setContentText("Tracking location in background")
             .setSmallIcon(R.drawable.ic_location)
             .setOngoing(true)
 //            .setPriority(NotificationCompat.PRIORITY_LOW)
